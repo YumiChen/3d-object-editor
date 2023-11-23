@@ -17,12 +17,12 @@ const ModelIdsProvider = ({ children }: { children: ReactNode }) => {
 
   const addModelId = useCallback((key: string, newId: string) => {
     setModelIds({...modelIds, [key]: newId});
-  }, []);
+  }, [modelIds]);
   const removeModelId = useCallback((key: string) => {
     const newModelIds = {...modelIds};
     delete newModelIds[key];
     setModelIds(newModelIds);
-  }, []);
+  }, [modelIds]);
 
   const contextValue = useMemo(() => {
     return { modelIds, addModelId, removeModelId };

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { ProviderProps, ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react';
 import { AmbientLight, Camera, Color, DirectionalLight, DoubleSide, Mesh, MeshBasicMaterial, PerspectiveCamera, PlaneGeometry, Renderer, Scene, TextureLoader, Vector3, WebGLRenderer } from 'three';
-import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
+import React, { ProviderProps, ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react';
+
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
 import { useModelIdsContext } from './ModelIds';
 
 const updateBlackList = ['floor'];
@@ -71,7 +72,7 @@ const ThreeJSProvider = ({ children }: { children: ReactNode }) => {
         renderer,
         loader
     });
-  }, []);
+  }, [addModelId]);
 
   return (
     <ThreeJS.Provider value={ThreeJSObjects}>
