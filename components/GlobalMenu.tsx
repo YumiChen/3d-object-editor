@@ -1,6 +1,7 @@
+import { ChangeEvent, useCallback } from 'react'
+
 import AddModel from './AddModel';
 import { AxesHelper } from 'three';
-import { useCallback } from 'react'
 import { useModelIdsContext } from '@/contexts/ModelIds';
 import { useThreeJSContext } from '@/contexts/ThreeJS';
 
@@ -8,7 +9,7 @@ export default function GlobalMenu() {
     const { scene } = useThreeJSContext();
     const { modelIds, addModelId, removeModelId } = useModelIdsContext();
 
-    const toggleAxesHelper = useCallback((event) => {
+    const toggleAxesHelper = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         const prevAxesHelper = scene?.getObjectByProperty('uuid', modelIds['axesHelper']);
         if(event?.target.checked){
             const axesHelper = new AxesHelper( 5 );

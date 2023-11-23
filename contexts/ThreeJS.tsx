@@ -11,7 +11,7 @@ const updateBlackList = ['floor'];
 
 interface ContextType {
     scene: Scene | null;
-    camera: Camera | null;
+    camera: PerspectiveCamera | null;
     controls: PointerLockControls | null;
     renderer: Renderer | null;
     loader: GLTFLoader | null;

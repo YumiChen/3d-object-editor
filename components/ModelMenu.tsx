@@ -1,11 +1,10 @@
 "use client";
 
-import { BoxHelper, Color, MeshStandardMaterial, Raycaster, Scene, Vector2 } from 'three';
+import { BoxHelper, Color, MeshStandardMaterial, Object3D, Object3DEventMap, Raycaster, Scene, Vector2 } from 'three';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { updateBlackList, useThreeJSContext } from '@/contexts/ThreeJS';
 
 import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { canvasId } from '@/constants/elementIds';
 import debounce from '@/utils/debounce';
 import { useModelIdsContext } from '@/contexts/ModelIds';
@@ -16,10 +15,10 @@ export default function ModelMenu() {
     const { scene, camera, renderer } = useThreeJSContext();
     const { modelIds } = useModelIdsContext();
 
-    const [clickedModel, setClickedModel] = useState<GLTF|null>(null);
-    const colorInputRef = useRef(null);
+    const [clickedModel, setClickedModel] = useState<Object3D<Object3DEventMap>|null>(null);
+    const colorInputRef = useRef<HTMLInputElement | null>(null);
 
-    const selectModel = useCallback((newClickedModel) => {
+    const selectModel = useCallback((newClickedModel: Object3D<Object3DEventMap>) => {
       if(!newClickedModel || !scene || !camera || !renderer) {
         return;
       }
@@ -32,17 +31,18 @@ export default function ModelMenu() {
       if(dragControls.current){
         dragControls.current.dispose();
       }
-      dragControls.current = new DragControls([newClickedModel], camera, renderer.domElement);
+      const newDragControls = new DragControls([newClickedModel], camera, renderer.domElement);
+      dragControls.current = newDragControls;
   
       // Event listeners
       dragControls.current?.addEventListener('dragstart', function (event) {
         // Disable rotation during drag
         event.object.rotation.y = 0;
-        dragControls.current.enabled = true;
+        newDragControls.enabled = true;
       });
   
       dragControls.current?.addEventListener('dragend', function () {
-        dragControls.current.enabled = false;
+        newDragControls.enabled = false;
       });
   
       setClickedModel(newClickedModel);
@@ -51,7 +51,7 @@ export default function ModelMenu() {
     }, [scene, camera, renderer, setClickedModel]);
     const prevOnDocumentClick = useRef<(event: MouseEvent) => void>(()=>{});
     const onDocumentClick = useCallback((event: MouseEvent) => {
-      if(event.target?.id !== canvasId){
+      if((event.target as HTMLElement)?.id !== canvasId || !camera || !scene || !colorInputRef.current){
         return;
       }
       // Calculate mouse coordinates in normalized device coordinates (NDC)
@@ -65,7 +65,7 @@ export default function ModelMenu() {
   
       // Check for intersections
       var intersects = raycaster.intersectObjects(scene.children, true);
-      var newClickedModel = intersects.find(obj=>(obj.object.isMesh))?.object;
+      var newClickedModel = intersects.find(obj=>((obj.object as THREE.Mesh).isMesh))?.object;
   
       if (newClickedModel && !updateBlackList.find((name)=>(modelIds[name] === newClickedModel?.uuid))) {
         // Handle the click on the object (you can replace this with your logic)
@@ -76,7 +76,7 @@ export default function ModelMenu() {
   
         if (newClickedModel) {
           selectModel(newClickedModel);
-          colorInputRef.current.value = `#${newClickedModel?.material?.color.getHexString()}`;
+          colorInputRef.current.value = `#${((newClickedModel as THREE.Mesh)?.material as MeshStandardMaterial)?.color.getHexString()}`;
         }
       }else if(box.current){
         scene.remove(box.current);
@@ -93,17 +93,16 @@ export default function ModelMenu() {
       document.addEventListener('click', onDocumentClick, false);
     }, [onDocumentClick]);
   
-    const changeColor = useCallback((event: ChangeEvent)=>{
+    const changeColor = useCallback((event: ChangeEvent<HTMLInputElement>)=>{
       if(!clickedModel || !event.target){
         return;
       }
       const newColor = new Color(event.target.value);
+
       const newMaterial = new MeshStandardMaterial({
         color: newColor,
-        roughness: clickedModel.material.roughness,
-        metalness: clickedModel.material.metalness,
       });
-      clickedModel.material = newMaterial;
+      (clickedModel as THREE.Mesh).material = newMaterial;
     }, [clickedModel]);
   
     const removeModel = useCallback(()=>{
@@ -113,17 +112,18 @@ export default function ModelMenu() {
         if(clickedModel.parent){
           clickedModel.parent.remove(clickedModel);
         }
-        else scene.remove(clickedModel);
+        else scene?.remove(clickedModel);
   
         if(box.current){
-          scene.remove(box.current);
+          scene?.remove(box.current);
           box.current = null;
         }
         setClickedModel(null);
     }, [scene, clickedModel, setClickedModel]);
   
-    const scaleModel = useCallback((event)=>{
-      clickedModel?.scale?.set(event.target.value, event.target.value, event.target.value);
+    const scaleModel = useCallback((event: ChangeEvent<HTMLInputElement>)=>{
+      const newScale = parseInt(event.target.value, 10);
+      clickedModel?.scale?.set(newScale, newScale, newScale);
     }, [clickedModel]);
   
 

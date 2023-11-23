@@ -1,12 +1,13 @@
 "use client";
 
+import { ReactNode, useEffect, useRef } from 'react'
+
 import { canvasId } from '@/constants/elementIds';
 import { useThreeJSContext } from '@/contexts/ThreeJS';
-import { ReactNode, useEffect, useRef } from 'react'
 
 export default function ThreeJSWrapper({
     children
-}: React.FC<{ children: ReactNode; }>) {
+}: { children: ReactNode; }) {
     const {
         scene,
         camera,
@@ -32,6 +33,9 @@ export default function ThreeJSWrapper({
         window.addEventListener('resize', onWindowResize, false);
 
         function rotateCamera(deltaX: number, deltaY: number) {
+            if(!camera) {
+                return;
+            }
             // Adjust rotation speed as needed
             const rotationSpeed = 0.005;
         
@@ -41,17 +45,17 @@ export default function ThreeJSWrapper({
             // Clamp vertical rotation to avoid flipping
             camera.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, camera.rotation.x));
         }
-        function onDocumentMouseDown(event) {
+        function onDocumentMouseDown(event: MouseEvent) {
             if (event.button === 1) {
                 isMouseWheelPressed.current = true;
             }
         }
-        function onDocumentMouseUp(event) {
+        function onDocumentMouseUp(event: MouseEvent) {
             if (event.button === 1) {
                 isMouseWheelPressed.current = false;
             }
         }
-        function onDocumentMouseMove(event) {
+        function onDocumentMouseMove(event: MouseEvent) {
             if (isMouseWheelPressed.current) {
             const deltaX = event.clientX - mouseX.current;
             const deltaY = event.clientY - mouseY.current;
