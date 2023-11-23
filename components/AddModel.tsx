@@ -1,5 +1,5 @@
-import { useThreeJSContext } from '@/contexts/ThreeJS';
 import { useCallback } from 'react'
+import { useThreeJSContext } from '@/contexts/ThreeJS';
 
 const modelPathMap: Record<string, string> = {
     'SOFA': 'sofa_chair/scene.gltf'
@@ -8,13 +8,13 @@ const modelPathMap: Record<string, string> = {
 const AddModel = () => {
     const { loader, scene } = useThreeJSContext();
     const addModel = useCallback((modelName: string)=>{        
-        loader.load(modelPathMap[modelName], function ( gltf ) {
+        loader?.load(modelPathMap[modelName], function ( gltf ) {
             gltf.scene.position.set(0, 0.5, 0);
-            scene.add( gltf.scene );
+            scene?.add( gltf.scene );
         }, undefined, function ( error ) {
             console.error( error );
         } );
-    }, [scene]);
+    }, [loader, scene]);
 
   return (<>
         <span>Add Model</span>

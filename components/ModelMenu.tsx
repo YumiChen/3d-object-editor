@@ -1,13 +1,14 @@
 "use client";
 
-import { canvasId } from '@/constants/elementIds';
-import { useModelIdsContext } from '@/contexts/ModelIds';
-import { updateBlackList, useThreeJSContext } from '@/contexts/ThreeJS';
-import debounce from '@/utils/debounce';
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { BoxHelper, Color, MeshStandardMaterial, Raycaster, Scene, Vector2 } from 'three';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
+import { updateBlackList, useThreeJSContext } from '@/contexts/ThreeJS';
+
 import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { canvasId } from '@/constants/elementIds';
+import debounce from '@/utils/debounce';
+import { useModelIdsContext } from '@/contexts/ModelIds';
 
 export default function ModelMenu() {
     const box = useRef<BoxHelper|null>(null);
@@ -85,7 +86,7 @@ export default function ModelMenu() {
       }else {
         setClickedModel(null);
       }
-    }, [camera, scene, clickedModel, modelIds]);
+    }, [camera, scene, modelIds, clickedModel, selectModel]);
     useEffect(()=>{
       document.removeEventListener('click', prevOnDocumentClick.current);
       prevOnDocumentClick.current = onDocumentClick;

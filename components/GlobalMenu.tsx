@@ -1,8 +1,8 @@
+import AddModel from './AddModel';
+import { AxesHelper } from 'three';
+import { useCallback } from 'react'
 import { useModelIdsContext } from '@/contexts/ModelIds';
 import { useThreeJSContext } from '@/contexts/ThreeJS';
-import { useCallback } from 'react'
-import { AxesHelper } from 'three';
-import AddModel from './AddModel';
 
 export default function GlobalMenu() {
     const { scene } = useThreeJSContext();
@@ -18,7 +18,7 @@ export default function GlobalMenu() {
             scene?.remove(prevAxesHelper);
             removeModelId('axesHelper');
         }
-      }, [scene, modelIds]);
+      }, [scene, modelIds, addModelId, removeModelId]);
 
   return (<div className='py-1 px-2 bg-neutral-50/20'>
         <ul className='list-disc list-inside'>
