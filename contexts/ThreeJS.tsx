@@ -1,7 +1,7 @@
 "use client";
 
-import { AmbientLight, Camera, Color, DirectionalLight, DoubleSide, Mesh, MeshBasicMaterial, PerspectiveCamera, PlaneGeometry, Renderer, Scene, TextureLoader, Vector3, WebGLRenderer } from 'three';
-import React, { ProviderProps, ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react';
+import { AmbientLight, Color, DirectionalLight, DoubleSide, Mesh, MeshBasicMaterial, PerspectiveCamera, PlaneGeometry, Renderer, Scene, TextureLoader, Vector3, WebGLRenderer } from 'three';
+import React, { ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
