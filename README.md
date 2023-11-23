@@ -34,3 +34,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+# Materials
+- [Sofa model](https://sketchfab.com/3d-models/sofa-chair-0e8e009f398249b9bc13e8ff7078530a)
+- [Floor wood texture](https://www.pexels.com/photo/brown-wooden-board-164005/)
