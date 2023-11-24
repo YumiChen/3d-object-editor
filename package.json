@@ -7,9 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "addNoJekyll": "echo Prevent not routing folders starting with _ > out/.nojekyll",
-    "predeploy": "(if exist \"out\" rmdir /s /q \"out\";) && git worktree add out gh-pages -f",
-    "deploy": "pnpm run build && pnpm run addNoJekyll && cd out && git add --all && git commit -m \"Update gh-pages\" && git push origin gh-pages && cd .."
+    "addNoJekyll": "echo Prevent not routing folders starting with _ > export/.nojekyll",
+    "predeploy": "(if exist \"export\" rmdir /s /q \"export\";) && git worktree add export gh-pages-deploy -f",
+    "deploy": "pnpm run build && cd export && git add --all && git commit -m \"Update gh-pages\" && git push origin gh-pages && cd .."
   },
   "dependencies": {
     "next": "14.0.3",
